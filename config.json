@@ -1,0 +1,119 @@
+{
+  "steps": [
+      {
+          "action": "navigate",
+          "target": "https://startselect.com/fr-fr/e-carte-google-play-euro25/32659"
+       },
+        {
+          "action": "click",
+           "target_type": "css",
+          "target": "[data-ss-track='product--buy-button']",
+          "wait_condition": "element_to_be_clickable"
+        },
+        {
+          "action": "click",
+           "target_type": "css",
+          "target": "[data-ss-track='cart--to-payment-button']",
+           "wait_condition": "element_to_be_clickable"
+        },
+      {
+          "action": "input",
+          "target_type": "name",
+          "target": "cart_login_email",
+          "input_data": "person.email",
+          "wait_condition": "presence_of_element_located"
+      },
+        {
+           "action": "get_elements_and_click",
+          "target_type": "css",
+          "target": "[data-at='payment-method']",
+            "wait_condition":"presence_of_all_elements_located"
+        },
+        {
+            "action": "input",
+             "target_type": "css",
+             "target": "[id='card_holder_name']",
+             "input_data":"person.name",
+            "wait_condition": "presence_of_element_located"
+        },
+        {
+           "action": "switch_frame",
+           "target_type": "xpath",
+           "target": "//iframe[contains(@title,'SFC secure field')]"
+        },
+        {
+            "action": "input",
+            "target_type": "name",
+            "target": "cardnumber",
+            "input_data": "cc.number",
+             "wait_condition": "presence_of_element_located"
+        },
+        {
+            "action": "switch_to_default"
+         },
+        {
+          "action": "switch_frame",
+           "target_type": "css",
+           "target": "[id='_exp']"
+        },
+        {
+            "action": "input",
+             "target_type": "css",
+             "target": "[placeholder='MM / AA']",
+             "input_data": "cc.exp",
+             "wait_condition": "presence_of_element_located"
+        },
+        {
+            "action": "switch_to_default"
+         },
+         {
+            "action": "switch_frame",
+            "target_type": "css",
+            "target": "[id='_cvc']"
+         },
+        {
+            "action": "input",
+             "target_type": "css",
+             "target": "[placeholder='CVV']",
+             "input_data": "cc.cvc",
+            "wait_condition": "presence_of_element_located"
+         },
+        {
+            "action": "switch_to_default"
+         },
+        {
+            "action": "input",
+             "target_type": "css",
+             "target": "[id='billing_street']",
+             "input_data":"person.street",
+             "wait_condition": "presence_of_element_located"
+        },
+        {
+            "action":"input",
+            "target_type":"css",
+            "target":"[id='billing_house_number']",
+            "input_data":"22",
+            "wait_condition":"presence_of_element_located"
+        },
+        {
+            "action": "input",
+             "target_type": "css",
+             "target": "[id='billing_postal_code']",
+             "input_data": "person.postal",
+            "wait_condition": "presence_of_element_located"
+        },
+       {
+            "action": "input",
+             "target_type": "css",
+             "target": "[id='billing_city']",
+              "input_data":"person.city",
+             "wait_condition": "presence_of_element_located"
+        },
+        {
+         "action": "click",
+           "target_type": "xpath",
+          "target": "//button[contains(@data-at,'confirm-button-order')]",
+          "wait_condition":"element_to_be_clickable"
+        }
+  ]
+}
