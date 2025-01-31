@@ -179,14 +179,13 @@ def execute_step(driver, step, persons, cc_data):
                     if data_key == "number":
                         element.send_keys(cc[0])
                     elif data_key == "exp":
-                        element.send_keys(cc[1] + cc[2])
-                        logging.info(f"Input {cc[2]} into element: {target}")
+                        mm = cc[1].replace("20", "")
+                        element.send_keys(mm)
                     elif data_key == "cvc":
                         element.send_keys(cc[3])
                     else:
                         element.send_keys(input_data)
 
-                    logging.info(f"Input {cc[2]} from credit card ")
                     logging.info(f"Input {data_key} from credit card data into element: {target}")
                 elif input_data:
                     element.send_keys(input_data)
@@ -236,12 +235,6 @@ def main():
         logging.error("Please provide a configuration file.")
         return
 
-    if not args.url:
-        logging.error("Please provide a URL to navigate to.")
-        url = "https://startselect.com/fr-fr/e-carte-google-play-euro25/32659"
-    else:
-        url = args.url
-
     try:
         with open(args.config, 'r') as f:
             config = json.load(f)
@@ -251,6 +244,15 @@ def main():
     except json.JSONDecodeError:
         logging.error(f"Error decoding JSON file: {args.config}")
         return
+
+    if not args.url:
+        logging.error("Please provide a URL to navigate to.")
+        # get url from config as start_url
+        url = config.get("start_url")
+    else:
+        url = args.url
+
+
 
     cc_data = load_cc_data()
     try:
