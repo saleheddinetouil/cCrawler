@@ -1,44 +1,48 @@
 # Dynamic Selenium Crawler Guide
 
-This guide will help you understand how to use the provided dynamic Selenium crawler to automate interactions with different websites. This tool uses configuration files in JSON format, making it highly flexible and adaptable.
+## [English]
 
-## Introduction
+This guide will help you understand how to use the dynamic Selenium Crawler for automating website interactions. This tool leverages JSON configuration files, providing exceptional flexibility and adaptability for various web automation tasks.
 
-The crawler is designed to automate tasks on websites, such as filling forms, clicking buttons, and navigating through pages. It works by following a sequence of steps defined in a JSON configuration file. The main benefits are:
+### Introduction
 
-*   **Flexibility**: Easily adapt to different websites by changing the configuration file.
-*   **Maintainability**: The code is structured, making it easier to understand and modify.
-*   **Efficiency**: Automates repetitive tasks.
+The Dynamic Selenium Crawler is engineered to automate repetitive web tasks such as form filling, button clicking, and page navigation. It operates based on a sequence of actions defined within a JSON configuration file. The key advantages include:
 
-## Getting Started
+*   **High Flexibility:** Easily adapt the crawler to different websites by simply modifying the `config.json` file. No code changes are usually needed.
+*   **Maintainable Design:** The crawler is built with a modular and object-oriented architecture, making it easy to understand, extend, and maintain.
+*   **Efficient Automation:** Automate repetitive and time-consuming web interactions, saving time and effort.
+*   **Robust Logging:** Features separate log files for crawler activity and errors, enhancing debugging and monitoring.
 
-### Prerequisites
+### Getting Started
 
-1.  **Python 3.7+:** Ensure you have Python installed on your system. Download it from [python.org](https://www.python.org/).
-2.  **Libraries**: Install required libraries using pip:
+#### Prerequisites
+
+1.  **Python 3.7+:** Ensure you have Python installed. Download from [python.org](https://www.python.org/).
+2.  **Libraries:** Install required Python libraries using pip:
 
     ```bash
     pip install -r requirements.txt
     ```
-    or
+    or, if you don't have `requirements.txt`:
+
     ```bash
     pip install selenium webdriver-manager
     ```
 
-### Files
+#### Files Description
 
-The following files are essential for running the crawler:
+*   **`crawler.py`**: The main Python script containing the crawler application code.
+*   **`crawler_app.py`**: The Python script for the GUI application.
+*   **`config.json`**:  A JSON file where you define the website interaction steps.
+*   **`cc.txt`**:  A plain text file to store credit card data for testing purposes (sensitive data, handle with care).
+*   **`requirements.txt`**: Lists Python packages required to run the crawler; used for easy installation.
+*   **`/results` folder**: This folder will be created upon execution to store crawler logs, error logs, valid CCs, and invalid CCs output files.
 
-*   **`crawler.py`**: The main Python script.
-*   **`config.json`**: The JSON configuration file, defining website navigation steps.
-*   **`cc.txt`**: Contains credit card data (you must provide this data).
-*   **`data.txt`**: Contains data (you can add your data)
-*   **`requirements.txt`**: Contains needed python packages
+### Configuration Files
 
-## Configuration Files
-### `config.json` Structure
+#### `config.json` Structure
 
-The `config.json` file is where you define the actions the crawler should take. It follows this structure:
+This JSON file dictates the crawler's actions. Here’s the basic structure:
 
 ```json
 {
@@ -52,448 +56,412 @@ The `config.json` file is where you define the actions the crawler should take. 
       "action": "click",
       "target_type": "css",
       "target": "#loginButton",
-       "wait_condition": "element_to_be_clickable"
-
+      "wait_condition": "element_to_be_clickable"
     },
     {
       "action": "input",
       "target_type": "id",
       "target": "username",
       "input_data": "person.email",
-        "wait_condition": "presence_of_element_located"
+      "wait_condition": "presence_of_element_located"
     },
-     {
+    {
       "action": "input",
       "target_type": "name",
       "target": "password",
       "input_data": "mypassword"
-
     },
-     {
-          "action": "switch_frame",
-           "target_type": "css",
-           "target": "[id='myiframe']"
-        },
     {
-     "action": "input",
+      "action": "switch_frame",
+      "target_type": "css",
+      "target": "[id='myiframe']"
+    },
+    {
+      "action": "input",
       "target_type": "css",
       "target": "[placeholder='Card Number']",
       "input_data": "cc.number",
-       "wait_condition": "presence_of_element_located"
-
+      "wait_condition": "presence_of_element_located"
     },
-     {
-         "action": "switch_to_default"
-     }
-
+    {
+      "action": "switch_to_default"
+    }
   ]
 }
 ```
 
-#### Key Attributes:
+**Attributes Explained:**
 
-*   **`start_url`**: The URL that will be opened at the beggining of the loop , if not set you should pass the url with the `-u` or `--url` argument
-*   **`steps`**: An array of actions the crawler will execute sequentially. Each step is a JSON object with the following:
-    *   **`action`**: The action to perform. Allowed values:
-        *   **`navigate`**: Navigate to a URL. The `target` is the URL.
-        *   **`click`**: Click on an element.
-        *   **`input`**: Input text into a field.
-        *  **`switch_frame`**: Switch to an Iframe.
-        *   **`switch_to_default`**: switch to default frame
-        *  **`get_elements_and_click`**: Get elements and click the first one .
-    *   **`target_type`**: The type of locator used to find the element. Allowed values:
-        *   **`id`**: HTML element ID.
-        *   **`name`**: HTML element name.
-        *   **`class`**: HTML element class name.
-        *   **`css`**: CSS selector.
-        *   **`xpath`**: XPath selector.
-    *   **`target`**: The value of the locator to find the element.
-    *   **`input_data`**: The text data to input for an "input" action. If starts with `person.`, it takes a field from `persons` data , `cc.` takes a field from credit card data.
-    *  **`wait_condition`**: The wait condition before performing the action `presence_of_element_located` or `element_to_be_clickable`, or `presence_of_all_elements_located`, you should add this wait condition when the target is not available right away.
+*   **`start_url` (Optional):** The initial URL the crawler will open. If provided, the GUI will pre-fill the URL field with this value. If not set, you must provide the URL via the `-u` argument or in the GUI.
+*   **`steps` (Array):** A list of actions to be executed in order. Each action is a JSON object:
+    *   **`action` (String, Required):**  The type of action. Allowed values:
+        *   `navigate`: Go to a specified URL (`target` is the URL).
+        *   `click`: Click on an element.
+        *   `input`: Type text into an input field.
+        *   `switch_frame`: Switch to a specific iframe.
+        *   `switch_to_default`: Switch back to the main document from an iframe.
+        *   `get_elements_and_click`: Finds multiple elements and clicks the first one.
+        *   `check_card`: Special action to check if a card is accepted, based on text or click on element.
+    *   **`target_type` (String, Required):**  How to locate the target element. Allowed values:
+        *   `id`, `name`, `class`, `css`, `xpath`
+    *   **`target` (String, Required):**  The locator value (e.g., `#loginButton` for CSS, `username` for ID).
+    *   **`input_data` (String, Optional for `click`, Required for `input`):** The text to input. Use prefixes for dynamic data:
+        *   `person.`: Uses data from the `persons` dictionary (e.g., `person.email`, `person.name`).
+        *   `cc.`: Uses credit card data from `cc.txt` (e.g., `cc.number`, `cc.exp`, `cc.cvc`).
+    *   **`wait_condition` (String, Optional):**  Explicit wait condition before action. Useful for dynamic websites. Allowed values:
+        *   `presence_of_element_located`
+        *   `element_to_be_clickable`
+        *   `presence_of_all_elements_located`
+        *   `text_to_be_present_in_element`
+    *   **`check_type` (String, Optional, Required for `check_card`):** Type of check for `check_card` action. Allowed values: `click`, `text`.
+    *   **`check_text` (String, Optional, Required for `check_card` with `text` check_type):** Text to check for `check_card` action.
+    *   **`current_cc` (String, Optional, Required for `check_card`):** Use `cc.number` to pass the current credit card number to the `check_card` action for logging purposes.
 
-### `cc.txt` Structure
+#### `cc.txt` Structure
 
-This file should contain credit card information, with one card per line, each part separated by `|`: `cc_number|cc_exp_month|cc_exp_year|cc_cvv`.
+Store credit card details, one per line, separated by `|`: `card_number|exp_month|exp_year|cvv`.
 
-For example:
+Example:
+
 ```
 5356740100410315|04|25|299
 5356740100435338|01|25|986
-5356740100466572|10|27|171
-5356740100460005|10|27|794
 ```
-### `data.txt` structure
 
-This file should contain your data, one data per line (you can add your own data)
 
-### Persons data
-The Persons Data is hardcoded in the script
 
-## How to Use
+#### Persons Data
 
-1.  **Prepare data:** create `cc.txt` with credit card data and `data.txt` with your data
-2.  **Configure JSON file:** Adapt `config.json` to your target website using the `config.json` structure. You can use chrome inspect and the select tool to copy the `css` or `xpath` selectors.
+The `persons` dictionary with sample user data is hardcoded in `crawler.py`.
 
-3.  **Run the crawler:** Open a terminal or command prompt, navigate to the directory containing `crawler.py`, `config.json` and the text files and run:
+### How to Use
+
+**Using the Command Line:**
+
+1.  **Prepare Data:** Ensure `cc.txt` is correctly filled.
+2.  **Configure `config.json`:**  Adapt `config.json` for your target website. Use browser inspect tools to get CSS or XPath selectors.
+3.  **Run:** Open a terminal in the project directory and execute:
 
     ```bash
-    python crawler.py -c config.json 
+    python crawler.py -c config.json [-u <URL>]
     ```
-     or to provide the url from command line
-     ```bash
-      python crawler.py -c config.json -u https://example.com
-     ```
-   Replace `config.json` with your configuration file path.
 
-    The crawler will execute each step on each credit card in `cc.txt`, and loop until all cc are finished.
+    *   `-c config.json`:  Specifies the configuration file.
+    *   `-u <URL>`: (Optional) Overrides `start_url` in `config.json`.
 
-## Troubleshooting
+**Using the GUI Application:**
 
-*   **Errors**: If the crawler fails, review the logs in the console for error messages. Check the locators in `config.json` are correct.
-*   **Website Changes**: If the website changes, you will need to update the locators in your JSON configuration file.
+1.  **Prepare Data:**  Ensure `cc.txt` is ready.
+2.  **Run GUI:** Execute `python crawler.py`.
+3.  **Configuration:**
+    *   **Config File:** Click "Browse" to select your `config.json`.
+    *   **CC File:** Click "Browse" to select your `cc.txt`.
+    *   **URL:** The URL field will auto-populate if `start_url` is in `config.json`; otherwise, enter the URL manually.
+4.  **Start/Stop:** Click "Start Crawler" to begin and "Stop Crawler" to halt execution.
+5.  **Results:** Monitor the "Results" section for live counts of imported, valid, and invalid cards, and elapsed time.
+6.  **Logs:** Check the `results` folder for detailed logs in `crawler-*.log` and `error-*.log`.
 
-## Advanced Usage
+### Troubleshooting
 
-*   **Dynamic Inputs:** The crawler can input dynamic data from the `persons` and `cc_data` objects using the `person.` and `cc.` prefixes in `input_data` field of steps.
-    *   For `person.` you can use : `person.name` , `person.email` , `person.phone`, `person.street` , `person.city`, `person.state` , `person.postal`
-    *   For `cc.` you can use :  `cc.number` , `cc.exp` , `cc.cvc`
+*   **Errors:** Check console output and `error-*.log` in the `results` folder for detailed error messages. Verify locators in `config.json`.
+*   **Website Changes:** Update CSS/XPath selectors in `config.json` if the website structure changes.
+*   **ChromeDriver Issues:** Ensure ChromeDriver version is compatible with your Chrome browser. If issues persist, try manually replacing ChromeDriver as detailed in advanced troubleshooting guides online for Selenium and ChromeDriver compatibility.
 
-## Conclusion
+### Advanced Usage
 
-This dynamic crawler provides a powerful way to automate web tasks. By understanding the JSON configuration structure, you can adapt it to various websites and use the persons and cc data. If you need more help or support don't hesitate to ask.
+*   **Dynamic Inputs:** Utilize `person.` and `cc.` prefixes in `input_data` for dynamic data insertion.
+    *   `person.` fields: `name`, `email`, `phone`, `street`, `city`, `state`, `postal`.
+    *   `cc.` fields: `number`, `exp`, `cvc`.
+
+### Logging System
+
+The crawler now features a robust logging system, with separate log files for different types of information:
+
+*   **`crawler-*.log`**: This file, located in the `results` directory, contains general information about the crawler's execution, such as navigation steps, element clicks, inputs, and overall progress. It's useful for tracking the crawler's workflow and general behavior.
+*   **`error-*.log`**: Also in the `results` directory, this log file specifically captures error messages encountered during the crawler's operation. WebDriver exceptions, configuration errors, and other issues are logged here, making it easier to debug and identify problems.
+
+By separating logs into crawler info and errors, it's simpler to diagnose issues and monitor the crawler's health and performance.
+
+### Conclusion
+
+This Dynamic Selenium Crawler is a versatile tool for web automation. By mastering the `config.json` structure and leveraging dynamic data inputs, you can automate interactions with a wide range of websites. For further assistance or feature requests, please do not hesitate to ask.
 
 ---
 
-# Guide du robot Selenium Dynamique
+## [Français] Guide du Robot Selenium Dynamique
 
 Ce guide vous aidera à comprendre comment utiliser le robot Selenium dynamique fourni pour automatiser les interactions avec différents sites Web. Cet outil utilise des fichiers de configuration au format JSON, ce qui le rend très flexible et adaptable.
 
-## Introduction
+### Introduction
 
-Le robot est conçu pour automatiser les tâches sur les sites Web, telles que le remplissage de formulaires, le clic sur des boutons et la navigation dans les pages. Il fonctionne en suivant une séquence d'étapes définies dans un fichier de configuration JSON. Les principaux avantages sont :
+Le robot est conçu pour automatiser les tâches répétitives sur les sites Web, telles que le remplissage de formulaires, le clic sur des boutons et la navigation dans les pages. Il fonctionne en suivant une séquence d'étapes définies dans un fichier de configuration JSON. Les principaux avantages sont :
 
-*   **Flexibilité** : Adaptation facile à différents sites Web en modifiant le fichier de configuration.
-*   **Maintenabilité** : Le code est structuré, ce qui le rend plus facile à comprendre et à modifier.
-*   **Efficacité** : Automatise les tâches répétitives.
+*   **Flexibilité élevée** : Adaptation facile du robot à différents sites Web en modifiant simplement le fichier `config.json`. Aucune modification de code n'est généralement nécessaire.
+*   **Conception Maintenable** : Le robot est construit avec une architecture modulaire et orientée objet, le rendant facile à comprendre, étendre et maintenir.
+*   **Automatisation Efficace** : Automatisez les interactions Web répétitives et chronophages, économisant du temps et des efforts.
+*   **Journalisation Robuste** : Dispose de fichiers journaux séparés pour l'activité du robot et les erreurs, améliorant le débogage et la surveillance.
 
-## Démarrage
+### Démarrage
 
-### Prérequis
+#### Prérequis
 
-1.  **Python 3.7+ :** Assurez-vous que Python est installé sur votre système. Téléchargez-le depuis [python.org](https://www.python.org/).
-2.  **Bibliothèques** : Installez les bibliothèques requises en utilisant pip :
+1.  **Python 3.7+ :** Assurez-vous que Python est installé. Téléchargez-le depuis [python.org](https://www.python.org/).
+2.  **Bibliothèques** : Installez les bibliothèques Python requises en utilisant pip :
 
     ```bash
     pip install -r requirements.txt
     ```
-    ou
+    ou, si vous n'avez pas `requirements.txt`:
+
     ```bash
      pip install selenium webdriver-manager
     ```
 
-### Fichiers
+#### Description des Fichiers
 
-Les fichiers suivants sont essentiels pour exécuter le robot :
+*   **`crawler.py`** : Le script Python principal contenant le code de l'application robot.
+*   **`crawler.py`** : Le script Python pour l'application GUI.
+*   **`config.json`** : Un fichier JSON où vous définissez les étapes d'interaction avec le site Web.
+*   **`cc.txt`** : Un fichier texte brut pour stocker les données de carte de crédit à des fins de test (données sensibles, à manipuler avec précaution).
+*   **`requirements.txt`**: Liste les packages Python nécessaires pour exécuter le robot ; utilisé pour une installation facile.
+*   **Dossier `/results`** : Ce dossier sera créé lors de l'exécution pour stocker les journaux du robot, les journaux d'erreurs, les CC valides et les fichiers de sortie CC invalides.
 
-*   **`crawler.py`** : Le script Python principal.
-*   **`config.json`** : Le fichier de configuration JSON, définissant les étapes de navigation sur le site Web.
-*   **`cc.txt`** : Contient les données de carte de crédit (vous devez fournir ces données).
-*   **`data.txt`** : Contient les données (vous pouvez ajouter vos propres données).
-*   **`requirements.txt`**: Contient les packages python nécessaires
+### Fichiers de Configuration
 
-## Fichiers de Configuration
+#### Structure de `config.json`
 
-### Structure de `config.json`
-
-Le fichier `config.json` est l'endroit où vous définissez les actions que le robot doit effectuer. Il suit cette structure :
+Ce fichier JSON dicte les actions du robot. Voici la structure de base :
 
 ```json
 {
-    "start_url": "https://example.com",
+  "start_url": "https://example.com",
   "steps": [
-    {
-      "action": "navigate",
-      "target": "https://example.com/login"
-    },
-    {
-      "action": "click",
-      "target_type": "css",
-      "target": "#loginButton",
-       "wait_condition": "element_to_be_clickable"
-
-    },
-    {
-      "action": "input",
-      "target_type": "id",
-      "target": "username",
-      "input_data": "person.email",
-        "wait_condition": "presence_of_element_located"
-    },
-     {
-      "action": "input",
-      "target_type": "name",
-      "target": "password",
-      "input_data": "mypassword"
-
-    },
-     {
-          "action": "switch_frame",
-           "target_type": "css",
-           "target": "[id='myiframe']"
-        },
-    {
-     "action": "input",
-      "target_type": "css",
-      "target": "[placeholder='Card Number']",
-      "input_data": "cc.number",
-       "wait_condition": "presence_of_element_located"
-
-    },
-     {
-         "action": "switch_to_default"
-     }
-
+    // ... étapes ...
   ]
 }
 ```
 
-#### Attributs Clés :
+**Attributs Expliqués :**
 
-*   **`start_url`**: L'URL qui sera ouverte au début de la boucle, si elle n'est pas définie, vous devez passer l'URL avec l'argument `-u` ou `--url`.
-*   **`steps`** : Un tableau d'actions que le robot exécutera séquentiellement. Chaque étape est un objet JSON avec les éléments suivants :
-    *   **`action`** : L'action à effectuer. Les valeurs autorisées :
-        *   **`navigate`** : Naviguer vers une URL. La `target` est l'URL.
-        *   **`click`** : Cliquer sur un élément.
-        *   **`input`** : Saisir du texte dans un champ.
-        *  **`switch_frame`**: Basculer vers un Iframe.
-        *   **`switch_to_default`**: revenir à la frame par défaut
-        *   **`get_elements_and_click`**: Obtenir les elements et cliquer sur le premier.
-    *   **`target_type`** : Le type de sélecteur utilisé pour trouver l'élément. Les valeurs autorisées :
-        *   **`id`** : ID d'élément HTML.
-        *   **`name`** : Nom d'élément HTML.
-        *   **`class`** : Nom de classe d'élément HTML.
-        *   **`css`** : Sélecteur CSS.
-        *   **`xpath`** : Sélecteur XPath.
-    *   **`target`** : La valeur du sélecteur pour trouver l'élément.
-    *   **`input_data`** : Les données textuelles à saisir pour une action « input ». S'il commence par `person.` , il prend un champ des données `persons`, `cc.` prend un champ des données de la carte de crédit.
-    *  **`wait_condition`**: La condition d'attente avant d'effectuer l'action `presence_of_element_located` ou `element_to_be_clickable`, ou `presence_of_all_elements_located`, vous devez ajouter cette condition d'attente lorsque la cible n'est pas disponible immédiatement.
+*   **`start_url` (Optionnel) :** L'URL initiale que le robot ouvrira. Si elle est fournie, la GUI pré-remplira le champ URL avec cette valeur. Si non défini, vous devez fournir l'URL via l'argument `-u` ou dans la GUI.
+*   **`steps` (Tableau) :** Une liste d'actions à exécuter séquentiellement. Chaque action est un objet JSON :
+    *   **`action` (Chaîne, Obligatoire) :** Le type d'action. Valeurs autorisées :
+        *   `navigate`, `click`, `input`, `switch_frame`, `switch_to_default`, `get_elements_and_click`, `check_card`
+    *   **`target_type` (Chaîne, Obligatoire) :** Comment localiser l'élément cible. Valeurs autorisées :
+        *   `id`, `name`, `class`, `css`, `xpath`
+    *   **`target` (Chaîne, Obligatoire) :** La valeur du localisateur (par exemple, `#loginButton` pour CSS, `username` pour ID).
+    *   **`input_data` (Chaîne, Optionnelle pour `click`, Obligatoire pour `input`) :** Le texte à saisir. Utilisez des préfixes pour les données dynamiques :
+        *   `person.` : Utilise les données du dictionnaire `persons` (ex : `person.email`, `person.name`).
+        *   `cc.` : Utilise les données de carte de crédit de `cc.txt` (ex : `cc.number`, `cc.exp`, `cc.cvc`).
+    *   **`wait_condition` (Chaîne, Optionnelle) :** Condition d'attente explicite avant l'action. Utile pour les sites Web dynamiques. Valeurs autorisées :
+        *   `presence_of_element_located`, `element_to_be_clickable`, `presence_of_all_elements_located`, `text_to_be_present_in_element`
+    *   **`check_type` (Chaîne, Optionnelle, Requis pour `check_card`) :** Type de vérification pour l'action `check_card`. Valeurs autorisées : `click`, `text`.
+    *   **`check_text` (Chaîne, Optionnelle, Requis pour `check_card` avec `text` check_type) :** Texte à vérifier pour l'action `check_card`.
+    *   **`current_cc` (Chaîne, Optionnelle, Requis pour `check_card`) :** Utilisez `cc.number` pour passer le numéro de carte de crédit actuel à l'action `check_card` à des fins de journalisation.
 
-### Structure de `cc.txt`
+#### Structure de `cc.txt`
 
-Ce fichier doit contenir les informations de la carte de crédit, avec une carte par ligne, chaque partie séparée par `|` : `numéro_cc|mois_exp|année_exp|ccv`.
+Contient les informations de carte de crédit, une par ligne, séparées par `|` : `numéro_carte|mois_exp|année_exp|cvv`.
 
-Par exemple :
+Exemple :
+
 ```
 5356740100410315|04|25|299
 5356740100435338|01|25|986
-5356740100466572|10|27|171
-5356740100460005|10|27|794
 ```
 
-### Structure de `data.txt`
+#### Données des Personnes
 
-Ce fichier doit contenir vos données, une donnée par ligne (vous pouvez ajouter vos propres données).
+Le dictionnaire `persons` avec des exemples de données utilisateur est codé en dur dans `crawler.py`.
 
-### Données des personnes
+### Comment Utiliser
 
-Les données des personnes sont codées en dur dans le script.
+**En utilisant la Ligne de Commande :**
 
-## Comment Utiliser
+1.  **Préparer les Données :** Assurez-vous que `cc.txt` est correctement rempli.
+2.  **Configurer `config.json` :** Adaptez `config.json` pour votre site Web cible. Utilisez les outils d'inspection du navigateur pour obtenir les sélecteurs CSS ou XPath.
+3.  **Exécuter :** Ouvrez un terminal dans le répertoire du projet et exécutez :
 
-1.  **Préparer les données :** créez `cc.txt` avec les données de carte de crédit et `data.txt` avec vos données.
-2.  **Configurer le fichier JSON :** Adaptez `config.json` à votre site Web cible en utilisant la structure `config.json`. Vous pouvez utiliser l'outil d'inspection de Chrome et l'outil de sélection pour copier les sélecteurs `css` ou `xpath`.
-3.  **Exécuter le robot :** Ouvrez un terminal ou une invite de commandes, naviguez vers le répertoire contenant `crawler.py`, `config.json` et les fichiers texte, puis exécutez :
     ```bash
-    python crawler.py -c config.json
+    python crawler.py -c config.json [-u <URL>]
     ```
-     ou pour fournir l'url depuis la ligne de commande
-     ```bash
-     python crawler.py -c config.json -u https://example.com
-     ```
-   Remplacez `config.json` par le chemin d'accès de votre fichier de configuration.
 
-    Le robot exécutera chaque étape sur chaque carte de crédit dans `cc.txt` et effectuera une boucle jusqu'à ce que toutes les cartes de crédit soient terminées.
+    *   `-c config.json` : Spécifie le fichier de configuration.
+    *   `-u <URL>` : (Optionnel) Remplace `start_url` dans `config.json`.
 
-## Dépannage
+**En utilisant l'Application GUI :**
 
-*   **Erreurs :** Si le robot échoue, consultez les journaux dans la console pour les messages d'erreur. Vérifiez que les sélecteurs dans `config.json` sont corrects.
-*   **Modifications du site Web :** Si le site Web change, vous devrez mettre à jour les sélecteurs dans votre fichier de configuration JSON.
+1.  **Préparer les Données :** Assurez-vous que `cc.txt` est prêt.
+2.  **Exécuter la GUI :** Exécutez `python crawler.py`.
+3.  **Configuration :**
+    *   **Fichier Config :** Cliquez sur "Browse" pour sélectionner votre `config.json`.
+    *   **Fichier CC :** Cliquez sur "Browse" pour sélectionner votre `cc.txt`.
+    *   **URL :** Le champ URL sera pré-rempli si `start_url` est dans `config.json` ; sinon, entrez l'URL manuellement.
+4.  **Démarrer/Arrêter :** Cliquez sur "Start Crawler" pour démarrer et "Stop Crawler" pour arrêter l'exécution.
+5.  **Résultats :** Surveillez la section "Results" pour les nombres en direct des cartes importées, valides et invalides, et le temps écoulé.
+6.  **Journaux :** Consultez le dossier `results` pour les journaux détaillés dans les fichiers `crawler-*.log` et `error-*.log`.
 
-## Utilisation Avancée
+### Dépannage
 
-*   **Saisies dynamiques :** Le robot peut saisir des données dynamiques à partir des objets `persons` et `cc_data` en utilisant les préfixes `person.` et `cc.` dans le champ `input_data` des étapes.
-    *   Pour `person.` vous pouvez utiliser : `person.name`, `person.email`, `person.phone`, `person.street`, `person.city`, `person.state`, `person.postal`.
-    *   Pour `cc.` vous pouvez utiliser : `cc.number`, `cc.exp`, `cc.cvc`.
+*   **Erreurs :** Consultez la sortie de la console et `error-*.log` dans le dossier `results` pour des messages d'erreur détaillés. Vérifiez que les sélecteurs dans `config.json` sont corrects.
+*   **Modifications du Site Web :** Mettez à jour les sélecteurs CSS/XPath dans `config.json` si la structure du site Web change.
+*   **Problèmes avec ChromeDriver :** Assurez-vous que la version de ChromeDriver est compatible avec votre navigateur Chrome. Si les problèmes persistent, essayez de remplacer manuellement ChromeDriver comme détaillé dans les guides de dépannage avancés en ligne pour la compatibilité Selenium et ChromeDriver.
 
-## Conclusion
+### Utilisation Avancée
 
-Ce robot dynamique offre un moyen puissant d'automatiser les tâches Web. En comprenant la structure de configuration JSON, vous pouvez l'adapter à divers sites Web et utiliser les données de personnes et de cartes de crédit. Si vous avez besoin d'aide ou d'assistance supplémentaire, n'hésitez pas à demander.
+*   **Saisies Dynamiques :** Utilisez les préfixes `person.` et `cc.` dans le champ `input_data` pour la saisie de données dynamiques.
+    *   Champs `person.` : `name`, `email`, `phone`, `street`, `city`, `state`, `postal`.
+    *   Champs `cc.` : `number`, `exp`, `cvc`.
+
+### Système de Journalisation
+
+Le robot dispose désormais d'un système de journalisation robuste, avec des fichiers journaux séparés pour différents types d'informations :
+
+*   **`crawler-*.log`** : Ce fichier, situé dans le répertoire `results`, contient des informations générales sur l'exécution du robot, telles que les étapes de navigation, les clics sur les éléments, les saisies et la progression globale. Il est utile pour suivre le flux de travail du robot et son comportement général.
+*   **`error-*.log`** : Également dans le répertoire `results`, ce fichier journal capture spécifiquement les messages d'erreur rencontrés lors du fonctionnement du robot. Les exceptions WebDriver, les erreurs de configuration et autres problèmes sont consignés ici, ce qui facilite le débogage et l'identification des problèmes.
+
+En séparant les journaux en informations du robot et erreurs, il est plus simple de diagnostiquer les problèmes et de surveiller la santé et les performances du robot.
+
+### Conclusion
+
+Ce Robot Selenium Dynamique est un outil polyvalent pour l'automatisation Web. En maîtrisant la structure de `config.json` et en tirant parti des saisies de données dynamiques, vous pouvez automatiser les interactions avec un large éventail de sites Web. Pour obtenir de l'aide supplémentaire ou des demandes de fonctionnalités, n'hésitez pas à demander.
 
 ---
 
-# دليل الزاحف الديناميكي لـ Selenium
+## [عربي] دليل الزاحف الديناميكي لـ Selenium
 
 سيساعدك هذا الدليل على فهم كيفية استخدام الزاحف الديناميكي لـ Selenium المقدم لأتمتة التفاعلات مع مواقع الويب المختلفة. تستخدم هذه الأداة ملفات التكوين بتنسيق JSON ، مما يجعلها مرنة للغاية وقابلة للتكيف.
 
-## مقدمة
+### مقدمة
 
-تم تصميم الزاحف لأتمتة المهام على مواقع الويب ، مثل ملء النماذج والنقر فوق الأزرار والتنقل عبر الصفحات. يعمل باتباع تسلسل من الخطوات المحددة في ملف تكوين JSON. الفوائد الرئيسية هي:
+تم تصميم الزاحف لأتمتة المهام المتكررة على مواقع الويب ، مثل ملء النماذج والنقر فوق الأزرار والتنقل عبر الصفحات. يعمل باتباع تسلسل من الخطوات المحددة في ملف تكوين JSON. الفوائد الرئيسية هي:
 
-*   **المرونة**: التكيف بسهولة مع مواقع الويب المختلفة عن طريق تغيير ملف التكوين.
-*   **قابلية الصيانة**: التعليمات البرمجية منظمة ، مما يجعلها أسهل للفهم والتعديل.
-*   **الكفاءة**: أتمتة المهام المتكررة.
+*   **مرونة عالية**: قم بتكييف الزاحف بسهولة مع مواقع الويب المختلفة ببساطة عن طريق تعديل ملف `config.json`. لا يلزم إجراء تغييرات على التعليمات البرمجية عادةً.
+*   **تصميم قابل للصيانة**: تم بناء الزاحف بهيكل معياري وموجه للكائنات ، مما يجعله سهل الفهم والتوسيع والصيانة.
+*   **أتمتة فعالة**: أتمتة التفاعلات المتكررة والمستهلكة للوقت على الويب ، مما يوفر الوقت والجهد.
+*   **تسجيل قوي**: يتميز بملفات سجل منفصلة لأنشطة الزاحف والأخطاء ، مما يعزز التصحيح والمراقبة.
 
-## البدء
+### البدء
 
-### المتطلبات الأساسية
+#### المتطلبات الأساسية
 
-1.  **Python 3.7+:** تأكد من تثبيت Python على نظامك. قم بتنزيله من [python.org](https://www.python.org/).
-2.  **المكتبات**: قم بتثبيت المكتبات المطلوبة باستخدام pip:
+1.  **Python 3.7+:** تأكد من تثبيت Python. قم بتنزيله من [python.org](https://www.python.org/).
+2.  **المكتبات**: قم بتثبيت مكتبات Python المطلوبة باستخدام pip:
 
     ```bash
     pip install -r requirements.txt
     ```
-    او
-     ```bash
+    أو ، إذا لم يكن لديك `requirements.txt`:
+
+    ```bash
      pip install selenium webdriver-manager
-     ```
+    ```
 
-### الملفات
+#### وصف الملفات
 
-الملفات التالية ضرورية لتشغيل الزاحف:
+*   **`crawler.py`**: برنامج Python الرئيسي الذي يحتوي على كود تطبيق الزاحف.
+*   **`crawler.py`**: برنامج Python لتطبيق GUI.
+*   **`config.json`**: ملف JSON حيث تحدد خطوات التفاعل مع موقع الويب.
+*   **`cc.txt`**: ملف نصي عادي لتخزين بيانات بطاقة الائتمان لأغراض الاختبار (بيانات حساسة ، تعامل معها بحذر).
+*   **`requirements.txt`**: يسرد حزم Python المطلوبة لتشغيل الزاحف ؛ يستخدم لسهولة التثبيت.
+*   **مجلد `/results`**: سيتم إنشاء هذا المجلد عند التنفيذ لتخزين سجلات الزاحف وسجلات الأخطاء وبطاقات الائتمان الصالحة وملفات إخراج بطاقات الائتمان غير الصالحة.
 
-*   **`crawler.py`**: برنامج Python الرئيسي.
-*   **`config.json`**: ملف تكوين JSON ، يحدد خطوات التنقل في موقع الويب.
-*   **`cc.txt`**: يحتوي على بيانات بطاقة الائتمان (يجب عليك توفير هذه البيانات).
-*   **`data.txt`**: يحتوي على البيانات (يمكنك إضافة البيانات الخاصة بك).
-*   **`requirements.txt`**: يحتوي على حزم python المطلوبة
+### ملفات التكوين
 
-## ملفات التكوين
+#### هيكل `config.json`
 
-### هيكل `config.json`
-
-ملف `config.json` هو المكان الذي تحدد فيه الإجراءات التي يجب أن يتخذها الزاحف. يتبع هذا الهيكل:
+يملي ملف JSON هذا إجراءات الزاحف. إليك الهيكل الأساسي:
 
 ```json
 {
-   "start_url": "https://example.com",
+  "start_url": "https://example.com",
   "steps": [
-    {
-      "action": "navigate",
-      "target": "https://example.com/login"
-    },
-    {
-      "action": "click",
-      "target_type": "css",
-      "target": "#loginButton",
-       "wait_condition": "element_to_be_clickable"
-
-    },
-    {
-      "action": "input",
-      "target_type": "id",
-      "target": "username",
-      "input_data": "person.email",
-        "wait_condition": "presence_of_element_located"
-    },
-     {
-      "action": "input",
-      "target_type": "name",
-      "target": "password",
-      "input_data": "mypassword"
-
-    },
-     {
-          "action": "switch_frame",
-           "target_type": "css",
-           "target": "[id='myiframe']"
-        },
-    {
-     "action": "input",
-      "target_type": "css",
-      "target": "[placeholder='Card Number']",
-      "input_data": "cc.number",
-       "wait_condition": "presence_of_element_located"
-
-    },
-     {
-         "action": "switch_to_default"
-     }
-
+    // ... الخطوات ...
   ]
 }
 ```
 
-#### السمات الرئيسية:
+**السمات المشروحة:**
 
-*   **`start_url`**: عنوان URL الذي سيتم فتحه في بداية الحلقة، إذا لم يتم تعيينه ، فيجب عليك تمرير عنوان URL بالوسيطة `-u` أو `--url`.
-*   **`steps`**: مصفوفة من الإجراءات التي سينفذها الزاحف بالتسلسل. كل خطوة عبارة عن كائن JSON مع ما يلي:
-    *   **`action`**: الإجراء الذي سيتم تنفيذه. القيم المسموح بها:
-        *   **`navigate`**: انتقل إلى عنوان URL. `target` هو عنوان URL.
-        *   **`click`**: انقر فوق عنصر.
-        *   **`input`**: أدخل نصًا في حقل.
-        *   **`switch_frame`**: التبديل إلى Iframe.
-        *   **`switch_to_default`**: التبديل إلى الإطار الافتراضي
-         *   **`get_elements_and_click`**: الحصول على العناصر والنقر فوق العنصر الأول.
-    *   **`target_type`**: نوع المحدد المستخدم للعثور على العنصر. القيم المسموح بها:
-        *   **`id`**: معرف عنصر HTML.
-        *   **`name`**: اسم عنصر HTML.
-        *   **`class`**: اسم فئة عنصر HTML.
-        *   **`css`**: محدد CSS.
-        *   **`xpath`**: محدد XPath.
-    *   **`target`**: قيمة المحدد للعثور على العنصر.
-    *   **`input_data`**: بيانات النص لإدخالها لإجراء "input". إذا بدأت بـ `person.` ، فإنها تأخذ حقلاً من بيانات `persons`، `cc.` تأخذ حقلاً من بيانات بطاقة الائتمان.
-    * **`wait_condition`**: حالة الانتظار قبل تنفيذ الإجراء `presence_of_element_located` أو `element_to_be_clickable` أو `presence_of_all_elements_located` ، يجب عليك إضافة حالة الانتظار هذه عندما لا يكون الهدف متاحًا على الفور.
+*   **`start_url` (اختياري):** عنوان URL الأولي الذي سيفتحه الزاحف. إذا تم توفيره ، فستقوم واجهة المستخدم الرسومية بملء حقل URL مسبقًا بهذه القيمة. إذا لم يتم تعيينه ، فيجب عليك توفير عنوان URL عبر الوسيطة `-u` أو في واجهة المستخدم الرسومية.
+*   **`steps` (مصفوفة):** قائمة بالإجراءات التي سيتم تنفيذها بالتسلسل. كل إجراء هو كائن JSON:
+    *   **`action` (سلسلة ، مطلوب):** نوع الإجراء. القيم المسموح بها:
+        *   `navigate`, `click`, `input`, `switch_frame`, `switch_to_default`, `get_elements_and_click`, `check_card`
+    *   **`target_type` (سلسلة ، مطلوب):** كيفية تحديد موقع العنصر المستهدف. القيم المسموح بها:
+        *   `id`, `name`, `class`, `css`, `xpath`
+    *   **`target` (سلسلة ، مطلوب):** قيمة المحدد (على سبيل المثال ، `#loginButton` لـ CSS ، و `username` لـ ID).
+    *   **`input_data` (سلسلة ، اختيارية لـ `click` ، مطلوبة لـ `input`):** النص المراد إدخاله. استخدم البادئات للبيانات الديناميكية:
+        *   `person.` : يستخدم بيانات من قاموس `persons` (مثل `person.email` و `person.name`).
+        *   `cc.` : يستخدم بيانات بطاقة الائتمان من `cc.txt` (مثل `cc.number` و `cc.exp` و `cc.cvc`).
+    *   **`wait_condition` (سلسلة ، اختيارية):** حالة الانتظار الصريحة قبل الإجراء. مفيد لمواقع الويب الديناميكية. القيم المسموح بها:
+        *   `presence_of_element_located`, `element_to_be_clickable`, `presence_of_all_elements_located`, `text_to_be_present_in_element`
+     *   **`check_type` (سلسلة ، اختيارية ، مطلوبة لـ `check_card`) :** نوع التحقق لإجراء `check_card`. القيم المسموح بها: `click`, `text`.
+    *   **`check_text` (سلسلة ، اختيارية ، مطلوبة لـ `check_card` مع `text` check_type) :** النص المراد التحقق منه لإجراء `check_card`.
+    *   **`current_cc` (سلسلة ، اختيارية ، مطلوبة لـ `check_card`) :** استخدم `cc.number` لتمرير رقم بطاقة الائتمان الحالي لإجراء `check_card` لأغراض التسجيل.
 
-### هيكل `cc.txt`
+#### هيكل `cc.txt`
 
-يجب أن يحتوي هذا الملف على معلومات بطاقة الائتمان ، مع وجود بطاقة واحدة في كل سطر ، كل جزء مفصول بـ `|`: `رقم_البطاقة|شهر_انتهاء_الصلاحية|سنة_انتهاء_الصلاحية|cvv`.
+يحتوي على معلومات بطاقة الائتمان ، واحدة في كل سطر ، مفصولة بـ `|`: `رقم_البطاقة|شهر_انتهاء_الصلاحية|سنة_انتهاء_الصلاحية|cvv`.
 
-على سبيل المثال:
+مثال:
 
 ```
 5356740100410315|04|25|299
 5356740100435338|01|25|986
-5356740100466572|10|27|171
-5356740100460005|10|27|794
 ```
 
-### هيكل `data.txt`
+#### بيانات الأشخاص
 
-يجب أن يحتوي هذا الملف على بياناتك ، وبيانات واحدة لكل سطر (يمكنك إضافة بياناتك الخاصة)
+قاموس `persons` مع أمثلة لبيانات المستخدم مرمز في `crawler.py`.
 
-### بيانات الأشخاص
+### كيف تستعمل
 
-يتم ترميز بيانات الأشخاص بشكل ثابت في البرنامج النصي.
+**باستخدام سطر الأوامر:**
 
-## كيف تستعمل
-
-1.  **جهز البيانات:** قم بإنشاء `cc.txt` ببيانات بطاقة الائتمان و `data.txt` ببياناتك.
-2.  **تكوين ملف JSON:** قم بتكييف `config.json` مع موقع الويب المستهدف باستخدام بنية `config.json`. يمكنك استخدام أداة الفحص في Chrome وأداة التحديد لنسخ محددات `css` أو `xpath`.
-3.  **قم بتشغيل الزاحف:** افتح موجه الأوامر أو الطرفية ، وانتقل إلى الدليل الذي يحتوي على `crawler.py`، `config.json` والملفات النصية ، وقم بتشغيل:
+1.  **تجهيز البيانات:** تأكد من ملء `cc.txt`  بشكل صحيح.
+2.  **تكوين `config.json`:** قم بتكييف `config.json` لموقع الويب المستهدف الخاص بك. استخدم أدوات فحص المتصفح للحصول على محددات CSS أو XPath.
+3.  **تشغيل:** افتح терминал في دليل المشروع وقم بتنفيذ:
 
     ```bash
-     python crawler.py -c config.json
+    python crawler.py -c config.json [-u <URL>]
     ```
-     أو لتوفير عنوان url من سطر الأوامر
-    ```bash
-      python crawler.py -c config.json -u https://example.com
-    ```
-    استبدل `config.json` بمسار ملف التكوين الخاص بك.
 
-    سينفذ الزاحف كل خطوة على كل بطاقة ائتمان في `cc.txt`، ويكرر حتى تنتهي جميع بطاقات الائتمان.
+    *   `-c config.json` : لتحديد ملف التكوين.
+    *   `-u <URL>` : (اختياري) تجاوز `start_url` في `config.json`.
 
-## استكشاف الأخطاء وإصلاحها
+**باستخدام تطبيق GUI:**
 
-*   **الأخطاء**: إذا فشل الزاحف ، فراجع السجلات في وحدة التحكم بحثًا عن رسائل الخطأ. تحقق من أن المحددات في `config.json` صحيحة.
-*   **تغييرات موقع الويب**: إذا تغير موقع الويب ، فستحتاج إلى تحديث المحددات في ملف تكوين JSON الخاص بك.
+1.  **تجهيز البيانات:** تأكد من أن `cc.txt` جاهزين.
+2.  **تشغيل GUI:** نفّذ `python crawler.py`.
+3.  **التكوين:**
+    *   **ملف Config:** انقر فوق "Browse" لتحديد `config.json` الخاص بك.
+    *   **ملف CC:** انقر فوق "Browse" لتحديد `cc.txt` الخاص بك.
+    *   **عنوان URL:** سيتم ملء حقل URL تلقائيًا إذا كان `start_url` موجودًا في `config.json` ؛ وإلا ، أدخل عنوان URL يدويًا.
+4.  **بدء / إيقاف:** انقر فوق "Start Crawler" للبدء و "Stop Crawler" لإيقاف التنفيذ.
+5.  **النتائج:** راقب قسم "Results" للحصول على أعداد مباشرة للبطاقات المستوردة والصالحة وغير الصالحة والوقت المنقضي.
+6.  **السجلات:** تحقق من مجلد `results` بحثًا عن سجلات مفصلة في ملفات `crawler-*.log` و `error-*.log`.
 
-## الاستخدام المتقدم
+### استكشاف الأخطاء وإصلاحها
 
-*   **المدخلات الديناميكية:** يمكن للزاحف إدخال بيانات ديناميكية من كائنات `persons` و `cc_data` باستخدام البادئات `person.` و`cc.` في حقل `input_data` من الخطوات.
-    *   بالنسبة إلى `person.` ، يمكنك استخدام: `person.name`، `person.email`، `person.phone`، `person.street`، `person.city`، `person.state`، `person.postal`.
-    *   بالنسبة إلى `cc.` ، يمكنك استخدام: `cc.number`، `cc.exp`، `cc.cvc`.
+*   **الأخطاء:** تحقق من إخراج وحدة التحكم و `error-*.log` في مجلد `results` بحثًا عن رسائل خطأ مفصلة. تحقق من أن المحددات في `config.json` صحيحة.
+*   **تغييرات موقع الويب:** قم بتحديث محددات CSS / XPath في `config.json` إذا تغير هيكل موقع الويب.
+*   **مشاكل ChromeDriver:** تأكد من أن إصدار ChromeDriver متوافق مع متصفح Chrome الخاص بك. إذا استمرت المشكلات ، فحاول استبدال ChromeDriver يدويًا كما هو مفصل في أدلة استكشاف الأخطاء وإصلاحها المتقدمة عبر الإنترنت لتوافق Selenium و ChromeDriver.
 
-## خاتمة
+### استخدام متقدم
 
-يوفر هذا الزاحف الديناميكي طريقة قوية لأتمتة مهام الويب. من خلال فهم بنية تكوين JSON ، يمكنك تكييفها مع مواقع ويب مختلفة واستخدام بيانات الأشخاص وبطاقات الائتمان. إذا كنت بحاجة إلى مزيد من المساعدة أو الدعم ، فلا تتردد في السؤال.
+*   **المدخلات الديناميكية:** استخدم البادئات `person.` و `cc.` في حقل `input_data` لإدخال البيانات الديناميكية.
+    *   حقول `person.` : `name`, `email`, `phone`, `street`, `city`, `state`, `postal`.
+    *   حقول `cc.` : `number`, `exp`, `cvc`.
+
+### نظام التسجيل
+
+يتميز الزاحف الآن بنظام تسجيل قوي ، مع ملفات سجل منفصلة لأنواع مختلفة من المعلومات:
+
+*   **`crawler-*.log`**: يحتوي هذا الملف الموجود في دليل `results` على معلومات عامة حول تنفيذ الزاحف ، مثل خطوات التنقل والنقرات على العناصر والمدخلات والتقدم العام. إنه مفيد لتتبع سير عمل الزاحف والسلوك العام.
+*   **`error-*.log`**: أيضًا في دليل `results` ، يسجل ملف السجل هذا على وجه التحديد رسائل الخطأ التي تمت مواجهتها أثناء تشغيل الزاحف. يتم تسجيل استثناءات WebDriver وأخطاء التكوين والمشكلات الأخرى هنا ، مما يسهل تصحيح الأخطاء وتحديد المشكلات.
+
+من خلال فصل السجلات إلى معلومات الزاحف والأخطاء ، يصبح من الأسهل تشخيص المشكلات ومراقبة صحة وأداء الزاحف.
+
+### خاتمة
+
+يعد هذا الزاحف الديناميكي لـ Selenium أداة متعددة الاستخدامات لأتمتة الويب. من خلال إتقان هيكل `config.json` والاستفادة من مدخلات البيانات الديناميكية ، يمكنك أتمتة التفاعلات مع مجموعة واسعة من مواقع الويب. لطلب المزيد من المساعدة أو طلبات الميزات ، يرجى عدم التردد في السؤال.
