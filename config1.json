@@ -1,9 +1,9 @@
 {
-    "start_url": "https://donate.givedirectly.org/payment-methods",
+    "start_url": "__URL__",
     "steps": [
         {
             "action": "navigate",
-            "target": "https://donate.givedirectly.org/payment-methods"
+            "target": "__URL__"
          },
           {
             "action": "input",
