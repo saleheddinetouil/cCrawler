@@ -13,6 +13,9 @@ The Dynamic Selenium Crawler is engineered to automate repetitive web tasks such
 *   **Efficient Automation:** Automate repetitive and time-consuming web interactions, saving time and effort.
 *   **Robust Logging:** Features separate log files for crawler activity and errors, enhancing debugging and monitoring.
 
+![Selenium Crawler Interface](images/screen.png)
+
+
 ### Getting Started
 
 #### Prerequisites
@@ -201,6 +204,9 @@ Le robot est conçu pour automatiser les tâches répétitives sur les sites Web
 *   **Automatisation Efficace** : Automatisez les interactions Web répétitives et chronophages, économisant du temps et des efforts.
 *   **Journalisation Robuste** : Dispose de fichiers journaux séparés pour l'activité du robot et les erreurs, améliorant le débogage et la surveillance.
 
+
+![Selenium Crawler Interface](images/screen.png)
+
 ### Démarrage
 
 #### Prérequis
@@ -340,7 +346,7 @@ Ce Robot Selenium Dynamique est un outil polyvalent pour l'automatisation Web. E
 *   **تصميم قابل للصيانة**: تم بناء الزاحف بهيكل معياري وموجه للكائنات ، مما يجعله سهل الفهم والتوسيع والصيانة.
 *   **أتمتة فعالة**: أتمتة التفاعلات المتكررة والمستهلكة للوقت على الويب ، مما يوفر الوقت والجهد.
 *   **تسجيل قوي**: يتميز بملفات سجل منفصلة لأنشطة الزاحف والأخطاء ، مما يعزز التصحيح والمراقبة.
-
+![Selenium Crawler Interface](images/screen.png)
 ### البدء
 
 #### المتطلبات الأساسية
