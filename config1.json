@@ -1,0 +1,78 @@
+{
+    "start_url": "https://donate.givedirectly.org/payment-methods",
+    "steps": [
+        {
+            "action": "navigate",
+            "target": "https://donate.givedirectly.org/payment-methods"
+         },
+          {
+            "action": "input",
+             "target_type": "id",
+            "target": "first-name",
+            "input_data":"person.name",
+            "wait_condition": "presence_of_element_located"
+          },
+          {
+            "action": "input",
+             "target_type": "id",
+            "target": "last-name",
+            "input_data":"person.name",
+            "wait_condition": "presence_of_element_located"
+          },
+          {
+            "action": "input",
+             "target_type": "id",
+            "target": "link-authentication-element",
+            "input_data":"person.email",
+            "wait_condition": "presence_of_element_located"
+          },
+          {
+             "action": "switch_frame",
+             "target_type": "xpath",
+             "target": "//iframe[contains(@title,'Secure payment input frame')]"
+          },
+          {
+              "action": "input",
+              "target_type": "id",
+              "target": "Field-numberInput",
+              "input_data": "cc.number",
+               "wait_condition": "presence_of_element_located"
+          },
+          {
+              "action": "input",
+               "target_type": "css",
+               "target": "[placeholder='MM / YY']",
+               "input_data": "cc.exp",
+               "wait_condition": "presence_of_element_located"
+          },
+          {
+              "action": "input",
+               "target_type": "css",
+               "target": "[placeholder='CVC']",
+               "input_data": "cc.cvc",
+              "wait_condition": "presence_of_element_located"
+           },
+           {
+               "action": "click",
+                "target_type": "css",
+                "target": "button",
+                "wait_condition":"element_to_be_clickable"
+
+           },
+           {
+               "action": "switch_frame",
+                "target_type": "css",
+                "target": "[name='stripe-challenge-frame']"
+              },
+          {
+           "action": "check_card",
+             "target_type": "id",
+                "target": "cancelButton",
+                "wait_condition":"element_to_be_clickable"
+          },
+          {
+                "action": "switch_to_default"
+          }
+
+    ]
+  }

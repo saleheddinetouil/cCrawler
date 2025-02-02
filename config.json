@@ -1,9 +1,9 @@
 {
-  "start_url": "https://startselect.com/fr-fr/e-carte-google-play-euro25/32659",
+  "start_url": "__URL__",
   "steps": [
       {
           "action": "navigate",
-          "target": "https://startselect.com/fr-fr/e-carte-google-play-euro25/32659"
+          "target": "__URL__"
        },
         {
           "action": "click",
@@ -115,6 +115,39 @@
            "target_type": "xpath",
           "target": "//button[contains(@data-at,'confirm-button-order')]",
           "wait_condition":"element_to_be_clickable"
+        },
+        {
+          "action": "click",
+            "target_type": "xpath",
+           "target": "//button[contains(@data-at,'confirm-button-order')]",
+           "wait_condition":"element_to_be_clickable"
+         },
+         {
+          "action": "click",
+            "target_type": "css",
+            "target": ".button.button--inversed.w-auto.float-end.mt-6",
+            "wait_condition":"element_to_be_clickable"
+
+         },
+         {
+          "action": "click",
+            "target_type": "xpath",
+           "target": "//button[contains(@data-at,'confirm-button-order')]",
+           "wait_condition":"element_to_be_clickable"
+         },
+        {
+          "action": "switch_frame",
+          "target_type": "id",
+          "target": "ifrm",
+          "wait_condition":"presence_of_element_located"
+        },
+      {
+          "action": "check_card",
+          "check_type": "click",
+           "target_type": "id",
+          "target": "cancelButton",
+          "wait_condition":"element_to_be_clickable",
+           "current_cc":"cc.number"
         }
   ]
 }
